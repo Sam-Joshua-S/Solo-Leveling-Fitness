@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#03040f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>SHADOWHUNTER</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #02030e;
+  --deep: #07091a;
+  --panel: #0c0f22;
+  --card: #10142a;
+  --rim: rgba(79,195,247,0.12);
+  --rim-s: rgba(79,195,247,0.06);
+  --electric: #00b4ff;
+  --electric-dim: rgba(0,180,255,0.1);
+  --purple: #7c4dff;
+  --violet: #b39ddb;
+  --gold: #ffd700;
+  --amber: #ffab00;
+  --danger: #ff1744;
+  --danger-dim: rgba(255,23,68,0.1);
+  --success: #00e676;
+  --text: #eaecf7;
+  --text-s: #9fa8da;
+  --text-xs: rgba(159,168,218,0.5);
+  --glow-b: 0 0 16px rgba(0,180,255,0.4);
+  --glow-g: 0 0 16px rgba(255,215,0,0.35);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --nav-h: 68px;
+  --header-h: 56px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--void);color:var(--text);font-family:'Rajdhani',sans-serif;-webkit-font-smoothing:antialiased;overscroll-behavior:none;}
+
+/* ── BOOT ── */
+#boot{position:fixed;inset:0;z-index:9999;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 24px;padding-top:var(--safe-top);transition:opacity .6s;}
+.boot-eye{width:80px;height:80px;border-radius:50%;background:radial-gradient(circle at 38% 38%,var(--electric),var(--purple),#000 70%);box-shadow:0 0 0 2px rgba(0,180,255,.3),0 0 50px rgba(0,180,255,.5),0 0 90px rgba(124,77,255,.3);margin-bottom:28px;animation:eyePulse 2s ease-in-out infinite;position:relative;}
+.boot-eye::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:22px;height:22px;background:#000;border-radius:50%;box-shadow:0 0 10px rgba(0,180,255,.8);}
+@keyframes eyePulse{0%,100%{box-shadow:0 0 0 2px rgba(0,180,255,.3),0 0 40px rgba(0,180,255,.5);}50%{box-shadow:0 0 0 4px rgba(0,180,255,.5),0 0 70px rgba(0,180,255,.7),0 0 110px rgba(124,77,255,.4);}}
+.boot-logo{font-family:'Orbitron',monospace;font-size:24px;font-weight:900;letter-spacing:6px;color:var(--text);margin-bottom:6px;}
+.boot-logo span{color:var(--electric);}
+.boot-sub{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--text-xs);margin-bottom:40px;}
+.boot-lines{width:260px;display:flex;flex-direction:column;gap:9px;margin-bottom:24px;}
+.boot-line{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--electric);opacity:0;transform:translateX(-8px);animation:slideIn .4s ease forwards;}
+@keyframes slideIn{to{opacity:1;transform:translateX(0);}}
+.boot-bar-wrap{width:260px;height:3px;background:rgba(0,180,255,.1);border-radius:2px;overflow:hidden;}
+.boot-bar-fill{height:100%;width:0;background:linear-gradient(90deg,var(--purple),var(--electric));border-radius:2px;animation:bootFill 2.2s ease forwards .5s;box-shadow:var(--glow-b);}
+@keyframes bootFill{to{width:100%;}}
+
+/* ── APP SHELL ── */
+#app{position:fixed;inset:0;display:flex;flex-direction:column;opacity:0;transition:opacity .5s;background:var(--void);}
+#app.visible{opacity:1;}
+#particles{position:fixed;inset:0;pointer-events:none;z-index:0;}
+
+/* ── HEADER ── */
+#header{position:relative;z-index:50;padding-top:var(--safe-top);background:rgba(2,3,14,.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--rim);flex-shrink:0;}
+.header-inner{height:var(--header-h);display:flex;align-items:center;justify-content:space-between;padding:0 16px;}
+.header-logo{font-family:'Orbitron',monospace;font-size:15px;font-weight:900;letter-spacing:3px;}
+.header-logo span{color:var(--electric);}
+.header-right{display:flex;align-items:center;gap:8px;}
+.rank-pill{font-family:'Orbitron',monospace;font-size:9px;font-weight:700;letter-spacing:1.5px;padding:4px 10px;border:1px solid rgba(255,215,0,.4);color:var(--gold);background:rgba(255,215,0,.05);border-radius:3px;}
+.notif-btn{width:38px;height:38px;background:var(--electric-dim);border:1px solid var(--rim);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;cursor:pointer;position:relative;}
+.notif-dot{position:absolute;top:7px;right:7px;width:7px;height:7px;background:var(--danger);border-radius:50%;border:1.5px solid var(--void);animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:.6;transform:scale(.9);}50%{opacity:1;transform:scale(1.2);}}
+
+/* ── CONTENT ── */
+#content{flex:1;overflow-y:auto;overflow-x:hidden;position:relative;z-index:1;-webkit-overflow-scrolling:touch;padding-bottom:calc(var(--nav-h) + var(--safe-bottom) + 8px);}
+#content::-webkit-scrollbar{display:none;}
+.screen{display:none;min-height:100%;padding:14px 14px 4px;}
+.screen.active{display:block;}
+
+/* ── BOTTOM NAV ── */
+#bottom-nav{position:relative;z-index:50;background:rgba(7,9,26,.97);backdrop-filter:blur(24px);border-top:1px solid var(--rim);padding-bottom:var(--safe-bottom);flex-shrink:0;}
+.nav-inner{height:var(--nav-h);display:flex;align-items:center;justify-content:space-around;}
+.nav-item{flex:1;height:var(--nav-h);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;position:relative;border:none;background:none;}
+.nav-item::before{content:'';position:absolute;top:0;left:25%;right:25%;height:2px;border-radius:0 0 2px 2px;background:var(--electric);transform:scaleX(0);transition:transform .3s;}
+.nav-item.active::before{transform:scaleX(1);}
+.nav-icon{font-size:20px;line-height:1;transition:transform .25s;}
+.nav-item.active .nav-icon{transform:translateY(-2px);}
+.nav-label{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--text-xs);text-transform:uppercase;transition:color .25s;}
+.nav-item.active .nav-label{color:var(--electric);}
+
+/* ── TOAST ── */
+#toast{position:fixed;top:calc(var(--safe-top) + var(--header-h) + 10px);left:12px;right:12px;z-index:500;background:rgba(7,9,26,.97);border:1px solid rgba(0,180,255,.3);border-left:3px solid var(--electric);border-radius:10px;padding:13px 15px;backdrop-filter:blur(20px);transform:translateY(-130%);transition:transform .4s cubic-bezier(.34,1.56,.64,1);box-shadow:0 8px 32px rgba(0,0,0,.5),var(--glow-b);}
+#toast.show{transform:translateY(0);}
+.toast-sys{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--electric);margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.toast-dot{width:5px;height:5px;border-radius:50%;background:var(--electric);animation:pulse 1.2s infinite;}
+.toast-title{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.toast-body{font-size:12px;color:var(--text-s);line-height:1.4;}
+.toast-xp{display:inline-block;margin-top:6px;font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--gold);background:rgba(255,215,0,.07);border:1px solid rgba(255,215,0,.25);padding:2px 10px;border-radius:2px;}
+
+/* ── LEVEL UP OVERLAY ── */
+#lvl-overlay{position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s;padding:24px;}
+#lvl-overlay.show{opacity:1;pointer-events:all;}
+.lvl-card{width:100%;max-width:340px;background:rgba(7,9,26,.98);border:1px solid rgba(255,215,0,.35);border-radius:6px;padding:40px 28px 32px;text-align:center;position:relative;overflow:hidden;}
+.lvl-rays{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(255,215,0,.08),transparent 70%);animation:spin 8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.lvl-corners::before,.lvl-corners::after{content:'';position:absolute;width:16px;height:16px;}
+.lvl-corners::before{top:8px;left:8px;border-top:2px solid var(--gold);border-left:2px solid var(--gold);}
+.lvl-corners::after{bottom:8px;right:8px;border-bottom:2px solid var(--gold);border-right:2px solid var(--gold);}
+.lvl-label{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:4px;color:var(--gold);margin-bottom:12px;position:relative;}
+.lvl-num{font-family:'Orbitron',monospace;font-size:72px;font-weight:900;color:var(--gold);text-shadow:0 0 40px rgba(255,215,0,.6);line-height:1;display:block;margin-bottom:8px;position:relative;animation:popIn .5s cubic-bezier(.34,1.56,.64,1);}
+@keyframes popIn{from{transform:scale(.3);opacity:0;}to{transform:scale(1);opacity:1;}}
+.lvl-title{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px;position:relative;}
+.lvl-reward{font-size:13px;color:var(--electric);margin-bottom:28px;position:relative;line-height:1.4;}
+.lvl-btn{width:100%;font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:2px;padding:15px;background:linear-gradient(135deg,var(--gold),var(--amber));border:none;border-radius:4px;color:var(--void);cursor:pointer;text-transform:uppercase;position:relative;min-height:48px;}
+.lvl-btn:active{transform:scale(.97);}
+
+/* ── FAB ── */
+#fab{position:fixed;right:16px;bottom:calc(var(--nav-h) + var(--safe-bottom) + 14px);z-index:200;width:54px;height:54px;background:linear-gradient(135deg,var(--electric),var(--purple));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;box-shadow:0 8px 24px rgba(0,180,255,.4),0 4px 12px rgba(0,0,0,.4);border:none;transition:all .2s cubic-bezier(.34,1.56,.64,1);}
+#fab:active{transform:scale(.88);box-shadow:0 4px 12px rgba(0,180,255,.3);}
+#fab::before{content:'';position:absolute;inset:-3px;border:1px solid rgba(0,180,255,.35);border-radius:19px;animation:fabRing 2.5s ease-in-out infinite;}
+@keyframes fabRing{0%,100%{opacity:.4;transform:scale(1);}50%{opacity:1;transform:scale(1.07);}}
+
+/* ── UTILS ── */
+.s-label{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:4px;color:var(--electric);text-transform:uppercase;display:block;margin-bottom:3px;}
+.s-title{font-family:'Orbitron',monospace;font-size:19px;font-weight:900;letter-spacing:-.5px;color:var(--text);line-height:1.1;margin-bottom:14px;}
+.s-title span{color:var(--electric);}
+.card{background:var(--card);border:1px solid var(--rim);border-radius:12px;position:relative;overflow:hidden;}
+.btn{display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;min-height:48px;border-radius:8px;cursor:pointer;border:none;transition:all .2s;width:100%;}
+.btn:active{transform:scale(.97);}
+.btn-primary{background:linear-gradient(135deg,var(--electric),var(--purple));color:#fff;box-shadow:0 4px 20px rgba(0,180,255,.25);}
+.btn-danger{background:linear-gradient(135deg,rgba(255,23,68,.8),rgba(255,23,68,.5));border:1px solid var(--danger);color:#fff;}
+.btn-ghost{background:var(--electric-dim);border:1px solid var(--rim);color:var(--electric);}
+.prog-track{height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:visible;position:relative;}
+.prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--purple),var(--electric));position:relative;transition:width 1.5s cubic-bezier(.4,0,.2,1);box-shadow:0 0 8px rgba(0,180,255,.5);}
+.prog-fill::after{content:'';position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:9px;height:9px;background:var(--electric);border-radius:50%;box-shadow:0 0 8px var(--electric);}
+
+/* ══════════════════════
+   SCREEN: HOME
+══════════════════════ */
+.home-hero{background:linear-gradient(135deg,rgba(124,77,255,.14),rgba(0,180,255,.07));border:1px solid rgba(79,195,247,.15);border-radius:14px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden;}
+.home-hero::before{content:'';position:absolute;top:-30px;right:-30px;width:110px;height:110px;background:radial-gradient(circle,rgba(124,77,255,.2),transparent);border-radius:50%;}
+.hero-greeting{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:3px;color:var(--electric);margin-bottom:5px;}
+.hero-name{font-family:'Orbitron',monospace;font-size:17px;font-weight:900;color:var(--text);margin-bottom:2px;letter-spacing:1px;}
+.hero-title-txt{font-size:11px;color:var(--text-s);letter-spacing:.5px;margin-bottom:14px;}
+.hero-lvl-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;}
+.hero-lvl{font-family:'Orbitron',monospace;font-size:12px;font-weight:700;color:var(--electric);}
+.hero-xp-txt{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-s);}
+
+.quick-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+.qs{background:var(--card);border:1px solid var(--rim);border-radius:10px;padding:12px 8px;text-align:center;}
+.qs-icon{font-size:20px;margin-bottom:3px;display:block;}
+.qs-val{font-family:'Orbitron',monospace;font-size:15px;font-weight:900;display:block;line-height:1;margin-bottom:2px;}
+.qs-lbl{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:1px;color:var(--text-xs);}
+
+.streak-widget{background:linear-gradient(135deg,rgba(255,171,0,.07),var(--card));border:1px solid rgba(255,171,0,.2);border-radius:12px;padding:14px;display:flex;align-items:center;gap:14px;margin-bottom:12px;}
+.streak-flame{font-size:42px;line-height:1;animation:flamePop 1.5s ease-in-out infinite;flex-shrink:0;}
+@keyframes flamePop{0%,100%{transform:scale(1);}50%{transform:scale(1.07);filter:drop-shadow(0 0 8px var(--amber));}}
+.streak-num{font-family:'Orbitron',monospace;font-size:36px;font-weight:900;color:var(--amber);text-shadow:0 0 20px rgba(255,171,0,.5);line-height:1;display:block;}
+.streak-lbl{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:3px;color:var(--text-s);}
+.streak-best{font-size:11px;color:var(--text-xs);margin-top:2px;}
+
+.mission-card{background:var(--card);border:1px solid var(--rim);border-radius:12px;padding:16px;margin-bottom:12px;}
+.mission-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.mission-timer{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:var(--danger);text-shadow:0 0 12px rgba(255,23,68,.4);}
+.quest-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--rim-s);cursor:pointer;}
+.quest-row:last-child{border-bottom:none;padding-bottom:0;}
+.quest-row:first-child{padding-top:0;}
+.q-check{width:26px;height:26px;flex-shrink:0;border:1.5px solid rgba(0,180,255,.35);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .3s;}
+.quest-row.done .q-check{background:var(--success);border-color:var(--success);box-shadow:0 0 10px rgba(0,230,118,.4);}
+.quest-row.done{opacity:.55;}
+.q-info{flex:1;}
+.q-name{font-size:14px;font-weight:700;color:var(--text);display:block;margin-bottom:1px;}
+.quest-row.done .q-name{text-decoration:line-through;}
+.q-meta{font-size:11px;color:var(--text-s);}
+.q-xp{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--gold);background:rgba(255,215,0,.07);border:1px solid rgba(255,215,0,.2);padding:3px 8px;border-radius:3px;white-space:nowrap;}
+
+.sys-msg{background:rgba(0,180,255,.04);border:1px solid var(--rim);border-left:3px solid var(--electric);border-radius:8px;padding:13px;margin-bottom:12px;}
+.sys-msg-hdr{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:3px;color:var(--electric);margin-bottom:5px;}
+.sys-msg-body{font-size:13px;color:var(--text-s);line-height:1.5;}
+
+.boss-teaser{background:var(--danger-dim);border:1px solid rgba(255,23,68,.2);border-radius:12px;padding:13px 15px;margin-bottom:12px;cursor:pointer;}
+.boss-teaser-lbl{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:3px;color:var(--danger);margin-bottom:5px;}
+.boss-teaser-name{font-family:'Orbitron',monospace;font-size:14px;font-weight:900;color:var(--text);margin-bottom:9px;}
+.hp-bar{height:9px;background:rgba(255,23,68,.1);border:1px solid rgba(255,23,68,.2);border-radius:5px;overflow:hidden;}
+.hp-fill{height:100%;background:linear-gradient(90deg,rgba(255,23,68,.9),var(--danger));border-radius:5px;transition:width 1s ease;box-shadow:0 0 8px rgba(255,23,68,.5);}
+
+/* ══════════════════════
+   SCREEN: DUNGEON
+══════════════════════ */
+.dg-type-row{display:flex;gap:7px;margin-bottom:12px;overflow-x:auto;padding-bottom:3px;}
+.dg-type-row::-webkit-scrollbar{display:none;}
+.dg-tab{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 13px;background:var(--card);border:1px solid var(--rim);border-radius:10px;cursor:pointer;transition:all .25s;min-width:78px;}
+.dg-tab.active{border-color:var(--electric);background:var(--electric-dim);}
+.dg-tab-icon{font-size:20px;}
+.dg-tab-name{font-family:'Orbitron',monospace;font-size:8px;font-weight:700;letter-spacing:1px;color:var(--text-s);text-transform:uppercase;text-align:center;}
+.dg-tab.active .dg-tab-name{color:var(--electric);}
+
+.diff-row{display:flex;gap:8px;margin-bottom:12px;}
+.diff-pill{flex:1;min-height:40px;display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;border-radius:8px;cursor:pointer;transition:all .25s;border:1px solid var(--rim);color:var(--text-s);background:var(--card);}
+.diff-pill.a-easy{border-color:var(--success);color:var(--success);background:rgba(0,230,118,.06);}
+.diff-pill.a-normal{border-color:var(--electric);color:var(--electric);background:var(--electric-dim);}
+.diff-pill.a-hard{border-color:var(--danger);color:var(--danger);background:var(--danger-dim);}
+
+.gen-btn{width:100%;margin-bottom:12px;background:var(--panel);border:1px dashed rgba(0,180,255,.3);border-radius:12px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:all .25s;}
+.gen-btn:active{transform:scale(.98);}
+.gen-btn-icon{font-size:30px;}
+.gen-btn-text{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:2px;color:var(--electric);text-transform:uppercase;}
+.gen-btn-sub{font-size:10px;color:var(--text-xs);font-family:'Share Tech Mono',monospace;letter-spacing:1px;}
+
+.ex-card{background:var(--card);border:1px solid var(--rim);border-radius:10px;padding:13px 14px;display:flex;align-items:center;gap:10px;margin-bottom:7px;animation:slideUp .3s ease both;}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.ex-num{width:27px;height:27px;flex-shrink:0;background:var(--electric-dim);border:1px solid var(--rim);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--electric);}
+.ex-name{font-size:14px;font-weight:700;color:var(--text);display:block;margin-bottom:1px;}
+.ex-meta{font-size:11px;color:var(--text-s);}
+.ex-sets{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:var(--electric);}
+
+.wo-summary{background:rgba(0,180,255,.05);border:1px solid var(--rim);border-radius:10px;padding:12px 14px;display:flex;justify-content:space-around;margin-bottom:10px;}
+.ws-val{font-family:'Orbitron',monospace;font-size:16px;font-weight:900;color:var(--electric);display:block;}
+.ws-lbl{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:1px;color:var(--text-xs);text-transform:uppercase;}
+
+/* ══════════════════════
+   SCREEN: ARMY
+══════════════════════ */
+.stat-panel{background:var(--card);border:1px solid var(--rim);border-radius:12px;padding:16px;margin-bottom:12px;}
+.stat-line{display:flex;align-items:center;gap:9px;margin-bottom:10px;}
+.stat-line:last-child{margin-bottom:0;}
+.stat-tag{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--text-s);width:26px;flex-shrink:0;}
+.stat-track{flex:1;height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;}
+.stat-fill{height:100%;border-radius:3px;transition:width 2s cubic-bezier(.4,0,.2,1);}
+.stat-fill.str{background:linear-gradient(90deg,#ff5252,#ff1744);}
+.stat-fill.agi{background:linear-gradient(90deg,var(--electric),#00e5ff);}
+.stat-fill.vit{background:linear-gradient(90deg,#69f0ae,var(--success));}
+.stat-fill.end{background:linear-gradient(90deg,var(--amber),#ff6d00);}
+.stat-fill.int{background:linear-gradient(90deg,var(--violet),var(--purple));}
+.stat-num{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;color:var(--text);width:24px;text-align:right;}
+
+.rank-ladder{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;}
+.rank-row{display:flex;align-items:center;gap:11px;padding:11px 14px;background:var(--card);border:1px solid var(--rim);border-radius:10px;position:relative;}
+.rank-row.current{border-color:var(--electric);background:var(--electric-dim);}
+.rank-row.current::after{content:'NOW';position:absolute;right:12px;top:50%;transform:translateY(-50%);font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:2px;color:var(--void);background:var(--electric);padding:2px 7px;border-radius:2px;}
+.rank-row.locked{opacity:.3;}
+.rank-letter-sm{font-family:'Orbitron',monospace;font-size:20px;font-weight:900;width:34px;text-align:center;}
+.rank-name-sm{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:var(--text);display:block;}
+.rank-req-sm{font-size:11px;color:var(--text-s);}
+
+.shadow-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.shadow-count{font-family:'Orbitron',monospace;font-size:11px;color:var(--violet);}
+.army-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:14px;}
+.shadow-cell{aspect-ratio:1;background:var(--card);border:1px solid rgba(124,77,255,.18);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;}
+.shadow-cell:active{transform:scale(.93);}
+.shadow-cell.locked{opacity:.22;filter:grayscale(1);}
+.shadow-em{font-size:22px;}
+.shadow-nm{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.5px;color:var(--violet);text-transform:uppercase;}
+.shadow-lv{font-family:'Orbitron',monospace;font-size:7px;color:rgba(124,77,255,.5);}
+
+/* ══════════════════════
+   SCREEN: RAIDS
+══════════════════════ */
+.boss-banner{background:linear-gradient(135deg,rgba(255,23,68,.07),var(--card));border:1px solid rgba(255,23,68,.25);border-radius:14px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden;}
+.boss-banner::after{content:'';position:absolute;bottom:-20px;right:-20px;width:90px;height:90px;background:radial-gradient(circle,rgba(255,23,68,.12),transparent);border-radius:50%;}
+.boss-tag{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--danger);margin-bottom:5px;display:flex;align-items:center;gap:6px;}
+.boss-tag-dot{width:5px;height:5px;background:var(--danger);border-radius:50%;animation:pulse 1.2s infinite;}
+.boss-name{font-family:'Orbitron',monospace;font-size:19px;font-weight:900;color:var(--text);line-height:1.1;margin-bottom:6px;}
+.boss-sub{font-size:12px;color:var(--text-s);margin-bottom:14px;line-height:1.4;}
+.hp-label-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.hp-lbl{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--danger);}
+.hp-pct{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;color:var(--danger);}
+.raid-days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:14px;}
+.raid-day{aspect-ratio:1;background:rgba(255,23,68,.05);border:1px solid rgba(255,23,68,.15);border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;transition:all .25s;}
+.raid-day.done{background:rgba(255,23,68,.18);border-color:var(--danger);}
+.raid-day-abbr{font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--text-xs);}
+.raid-day.done .raid-day-abbr{color:var(--danger);}
+.raid-day-icon{font-size:11px;}
+.boss-rewards-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px;}
+.reward-chip{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;padding:3px 8px;border-radius:3px;color:var(--gold);border:1px solid rgba(255,215,0,.25);background:rgba(255,215,0,.05);}
+
+.ach-list{display:flex;flex-direction:column;gap:7px;}
+.ach-row{display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--rim);border-radius:10px;padding:11px 13px;cursor:pointer;transition:all .2s;}
+.ach-row.unlocked{border-color:rgba(255,215,0,.2);}
+.ach-row.locked{opacity:.3;filter:grayscale(.8);}
+.ach-row:active{transform:scale(.98);}
+.ach-em{width:38px;height:38px;flex-shrink:0;background:rgba(255,215,0,.07);border:1px solid rgba(255,215,0,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;}
+.ach-nm{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:var(--text);display:block;margin-bottom:1px;}
+.ach-desc-sm{font-size:11px;color:var(--text-s);}
+.ach-xp-sm{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--gold);white-space:nowrap;}
+
+/* ══════════════════════
+   SCREEN: PROFILE
+══════════════════════ */
+.hunter-card{background:linear-gradient(135deg,rgba(124,77,255,.1),var(--card));border:1px solid rgba(124,77,255,.25);border-radius:14px;padding:18px;margin-bottom:12px;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden;}
+.hunter-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--purple),var(--electric),var(--purple));}
+.avatar-wrap{width:68px;height:68px;flex-shrink:0;background:linear-gradient(135deg,var(--purple),var(--electric));border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 0 20px rgba(124,77,255,.4);position:relative;}
+.avatar-wrap::after{content:'';position:absolute;inset:-2px;border:1px solid rgba(0,180,255,.3);border-radius:16px;}
+.hunter-rank-tag{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--text-s);margin-bottom:2px;}
+.hunter-nm{font-family:'Orbitron',monospace;font-size:15px;font-weight:900;color:var(--text);margin-bottom:1px;letter-spacing:1px;}
+.hunter-title-tag{font-size:11px;color:var(--electric);letter-spacing:.5px;margin-bottom:9px;}
+
+.fat-tracker{background:var(--card);border:1px solid var(--rim);border-radius:12px;padding:16px;margin-bottom:12px;}
+.ft-nums{display:flex;gap:16px;margin-bottom:14px;}
+.ft-num{text-align:center;}
+.ft-val{font-family:'Orbitron',monospace;font-size:20px;font-weight:900;display:block;line-height:1;}
+.ft-val.current{color:var(--electric);}
+.ft-val.lost{color:var(--success);}
+.ft-val.goal{color:var(--text-s);}
+.ft-label{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:1px;color:var(--text-xs);text-transform:uppercase;}
+
+.heat-wrap{background:var(--card);border:1px solid var(--rim);border-radius:12px;padding:14px;margin-bottom:12px;}
+.heat-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;}
+.heat-cell{aspect-ratio:1;background:rgba(79,195,247,.04);border:1px solid rgba(79,195,247,.08);border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;transition:all .2s;}
+.heat-cell.done{background:rgba(0,230,118,.1);border-color:rgba(0,230,118,.3);}
+.heat-cell.miss{background:rgba(255,23,68,.05);border-color:rgba(255,23,68,.12);}
+.heat-cell:active{transform:scale(.9);}
+.heat-day-abbr{font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--text-xs);}
+.heat-cell.done .heat-day-abbr{color:var(--success);}
+.heat-cell.miss .heat-day-abbr{color:rgba(255,23,68,.4);}
+.heat-icon{font-size:11px;}
+
+.lb-row{display:flex;align-items:center;gap:9px;padding:10px 13px;background:var(--card);border:1px solid var(--rim);border-radius:10px;margin-bottom:6px;transition:all .2s;}
+.lb-row.you{border-color:var(--electric);background:var(--electric-dim);}
+.lb-row:active{transform:scale(.99);}
+.lb-pos{font-family:'Orbitron',monospace;font-size:14px;font-weight:900;width:24px;text-align:center;}
+.lb-hunter-nm{font-size:13px;font-weight:700;color:var(--text);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lb-hunter-title{font-size:10px;color:var(--text-s);}
+.lb-rank-chip{font-family:'Orbitron',monospace;font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;flex-shrink:0;}
+.lb-fat-val{font-family:'Orbitron',monospace;font-size:12px;font-weight:700;color:var(--success);white-space:nowrap;text-align:right;min-width:50px;}
+</style>
+</head>
+<body>
+
+<!-- BOOT -->
+<div id="boot">
+  <div class="boot-eye"></div>
+  <div class="boot-logo">SHADOW<span>HUNTER</span></div>
+  <div class="boot-sub">FAT LOSS SYSTEM v2.0</div>
+  <div class="boot-lines" id="boot-lines"></div>
+  <div class="boot-bar-wrap"><div class="boot-bar-fill"></div></div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <canvas id="particles"></canvas>
+
+  <!-- Toast -->
+  <div id="toast">
+    <div class="toast-sys"><div class="toast-dot"></div>THE SYSTEM</div>
+    <div class="toast-title" id="toast-title">Loading...</div>
+    <div class="toast-body" id="toast-body"></div>
+    <span class="toast-xp" id="toast-xp"></span>
+  </div>
+
+  <!-- Level Up -->
+  <div id="lvl-overlay">
+    <div class="lvl-card">
+      <div class="lvl-rays"></div>
+      <div class="lvl-corners"></div>
+      <div class="lvl-label">[ SYSTEM NOTIFICATION ]</div>
+      <span class="lvl-num" id="lvl-num">7</span>
+      <div class="lvl-title">LEVEL UP</div>
+      <div class="lvl-reward" id="lvl-reward">+500 XP · Shadow Unlocked</div>
+      <button class="lvl-btn" onclick="closeLvlUp()">CONTINUE HUNTING</button>
+    </div>
+  </div>
+
+  <!-- FAB -->
+  <button id="fab" onclick="quickLog()">⚡</button>
+
+  <!-- Header -->
+  <div id="header">
+    <div class="header-inner">
+      <div class="header-logo">SHADOW<span>HUNTER</span></div>
+      <div class="header-right">
+        <div class="rank-pill" id="nav-rank">E-RANK</div>
+        <div class="notif-btn" onclick="showRandomToast()">🔔<div class="notif-dot"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div id="content">
+
+    <!-- HOME -->
+    <div id="screen-home" class="screen active">
+      <div class="home-hero">
+        <div class="hero-greeting" id="hero-greeting">[ SYSTEM — GOOD MORNING, HUNTER ]</div>
+        <div class="hero-name">SUNG JIN-WOO</div>
+        <div class="hero-title-txt">「 The Weakest Hunter of All Mankind 」</div>
+        <div class="hero-lvl-row">
+          <span class="hero-lvl">LEVEL <span id="hero-lvl-num">6</span></span>
+          <span class="hero-xp-txt" id="hero-xp-txt">1,240 / 2,000 XP</span>
+        </div>
+        <div class="prog-track"><div class="prog-fill" id="hero-xp-bar" style="width:62%"></div></div>
+      </div>
+
+      <div class="quick-stats">
+        <div class="qs"><span class="qs-icon">🔥</span><span class="qs-val" style="color:var(--amber)">6</span><span class="qs-lbl">STREAK</span></div>
+        <div class="qs"><span class="qs-icon">⚖️</span><span class="qs-val" style="color:var(--success)">−4.2kg</span><span class="qs-lbl">SLAIN</span></div>
+        <div class="qs"><span class="qs-icon">👥</span><span class="qs-val" style="color:var(--violet)">3</span><span class="qs-lbl">SHADOWS</span></div>
+      </div>
+
+      <div class="streak-widget">
+        <div class="streak-flame">🔥</div>
+        <div>
+          <span class="streak-num">6</span>
+          <div class="streak-lbl">DAY STREAK</div>
+          <div class="streak-best">Best: 12 · Don't break it!</div>
+        </div>
+        <div style="margin-left:auto;text-align:right;">
+          <div style="font-family:'Orbitron';font-size:10px;color:var(--text-s);margin-bottom:3px;">WEEKLY</div>
+          <div style="font-family:'Orbitron';font-size:22px;font-weight:900;color:var(--success);">4/5</div>
+          <div style="font-size:9px;color:var(--text-xs);">MISSIONS</div>
+        </div>
+      </div>
+
+      <div class="mission-card">
+        <div class="mission-header">
+          <div>
+            <span class="s-label">TODAY'S ORDERS</span>
+            <div style="font-family:'Orbitron';font-size:13px;font-weight:700;color:var(--text);">DAILY QUESTS</div>
+          </div>
+          <div class="mission-timer" id="quest-timer-home">--:--:--</div>
+        </div>
+        <div id="home-quest-list"></div>
+      </div>
+
+      <div class="sys-msg">
+        <div class="sys-msg-hdr">[ THE SYSTEM SPEAKS ]</div>
+        <div class="sys-msg-body">"You have been given a power that others only dream of. The question is — will you use it, or let the Fat Monarch continue to claim your vessel?"</div>
+      </div>
+
+      <div class="boss-teaser" onclick="switchTab('raids')">
+        <div class="boss-teaser-lbl">[ ACTIVE RAID — TAP TO VIEW ]</div>
+        <div class="boss-teaser-name">BEELZEBUB — 85% HP REMAINING</div>
+        <div class="hp-bar"><div class="hp-fill" style="width:85%"></div></div>
+      </div>
+    </div>
+
+    <!-- DUNGEON -->
+    <div id="screen-dungeon" class="screen">
+      <span class="s-label">TRAINING SYSTEM</span>
+      <div class="s-title">DUNGEON <span>RAIDS</span></div>
+
+      <div class="dg-type-row">
+        <div class="dg-tab active" onclick="selectDg(this,'fat-burn')"><div class="dg-tab-icon">🔥</div><div class="dg-tab-name">FAT BURN</div></div>
+        <div class="dg-tab" onclick="selectDg(this,'strength')"><div class="dg-tab-icon">⚡</div><div class="dg-tab-name">STRENGTH</div></div>
+        <div class="dg-tab" onclick="selectDg(this,'endurance')"><div class="dg-tab-icon">🌊</div><div class="dg-tab-name">ENDURANCE</div></div>
+        <div class="dg-tab" onclick="selectDg(this,'hiit')"><div class="dg-tab-icon">💥</div><div class="dg-tab-name">HIIT</div></div>
+      </div>
+
+      <div class="diff-row">
+        <div class="diff-pill a-easy" onclick="selectDiff(this,'easy')">EASY</div>
+        <div class="diff-pill" onclick="selectDiff(this,'normal')">NORMAL</div>
+        <div class="diff-pill" onclick="selectDiff(this,'hard')">HARD</div>
+      </div>
+
+      <div class="gen-btn" onclick="generateWorkout()">
+        <div class="gen-btn-icon">⚔️</div>
+        <div class="gen-btn-text">GENERATE PROTOCOL</div>
+        <div class="gen-btn-sub">TAP — RECEIVE ORDERS FROM THE SYSTEM</div>
+      </div>
+
+      <div id="dungeon-output"></div>
+    </div>
+
+    <!-- ARMY -->
+    <div id="screen-army" class="screen">
+      <span class="s-label">HUNTER AUTHORITY</span>
+      <div class="s-title">RANK & <span>ARMY</span></div>
+
+      <div class="stat-panel">
+        <div style="font-family:'Orbitron';font-size:11px;font-weight:700;letter-spacing:1px;color:var(--text);margin-bottom:12px;">HUNTER STATS</div>
+        <div class="stat-line"><span class="stat-tag">STR</span><div class="stat-track"><div class="stat-fill str" style="width:34%"></div></div><span class="stat-num">34</span></div>
+        <div class="stat-line"><span class="stat-tag">AGI</span><div class="stat-track"><div class="stat-fill agi" style="width:41%"></div></div><span class="stat-num">41</span></div>
+        <div class="stat-line"><span class="stat-tag">VIT</span><div class="stat-track"><div class="stat-fill vit" style="width:28%"></div></div><span class="stat-num">28</span></div>
+        <div class="stat-line"><span class="stat-tag">END</span><div class="stat-track"><div class="stat-fill end" style="width:36%"></div></div><span class="stat-num">36</span></div>
+        <div class="stat-line"><span class="stat-tag">INT</span><div class="stat-track"><div class="stat-fill int" style="width:52%"></div></div><span class="stat-num">52</span></div>
+      </div>
+
+      <span class="s-label">RANK PROGRESSION</span>
+      <div class="rank-ladder" id="rank-ladder"></div>
+
+      <div class="shadow-header">
+        <div><span class="s-label">SHADOW EXTRACTION</span><div style="font-family:'Orbitron';font-size:13px;font-weight:700;color:var(--text);">YOUR ARMY</div></div>
+        <div class="shadow-count">3 / ∞</div>
+      </div>
+      <div class="army-grid" id="army-grid"></div>
+    </div>
+
+    <!-- RAIDS -->
+    <div id="screen-raids" class="screen">
+      <span class="s-label">MONARCH BATTLES</span>
+      <div class="s-title">BOSS <span>RAIDS</span></div>
+
+      <div class="boss-banner">
+        <div class="boss-tag"><div class="boss-tag-dot"></div>ACTIVE MONARCH</div>
+        <div class="boss-name">THE FAT MONARCH<br>BEELZEBUB</div>
+        <div class="boss-sub">Seven days. Seven strikes. Break the Monarch's hold over your body forever.</div>
+        <div class="hp-label-row"><span class="hp-lbl">MONARCH HP</span><span class="hp-pct" id="boss-hp-pct">85%</span></div>
+        <div class="hp-bar" style="margin-bottom:14px;"><div class="hp-fill" id="boss-hp-fill" style="width:85%"></div></div>
+        <div class="raid-days" id="raid-days"></div>
+        <div class="boss-rewards-row">
+          <span class="reward-chip">+2000 XP</span>
+          <span class="reward-chip">TITLE: BEEL'S BANE</span>
+          <span class="reward-chip">SHADOW UNLOCKED</span>
+        </div>
+        <button class="btn btn-danger" onclick="attackBoss()">⚔ STRIKE THE MONARCH</button>
+      </div>
+
+      <span class="s-label">ACCOMPLISHMENTS</span>
+      <div class="s-title">ACHIEVEMENT <span>CODEX</span></div>
+      <div class="ach-list" id="ach-list"></div>
+    </div>
+
+    <!-- PROFILE -->
+    <div id="screen-profile" class="screen">
+      <span class="s-label">HUNTER REGISTRY</span>
+      <div class="s-title">YOUR <span>PROFILE</span></div>
+
+      <div class="hunter-card">
+        <div class="avatar-wrap">⚔️</div>
+        <div style="flex:1;min-width:0;">
+          <div class="hunter-rank-tag">E-RANK HUNTER</div>
+          <div class="hunter-nm">SUNG JIN-WOO</div>
+          <div class="hunter-title-tag">「 The Weakest Hunter 」</div>
+          <div style="display:flex;align-items:center;gap:7px;">
+            <span style="font-family:'Orbitron';font-size:10px;font-weight:700;color:var(--electric);flex-shrink:0;">LVL 6</span>
+            <div class="prog-track" style="flex:1;"><div class="prog-fill" style="width:62%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fat-tracker">
+        <div style="font-family:'Orbitron';font-size:11px;font-weight:700;color:var(--text);letter-spacing:1px;margin-bottom:12px;">FAT ELIMINATION LOG</div>
+        <div class="ft-nums">
+          <div class="ft-num"><span class="ft-val current">98.8<span style="font-size:11px">kg</span></span><span class="ft-label">CURRENT</span></div>
+          <div class="ft-num"><span class="ft-val lost">−4.2<span style="font-size:11px">kg</span></span><span class="ft-label">SLAIN</span></div>
+          <div class="ft-num"><span class="ft-val goal">80<span style="font-size:11px">kg</span></span><span class="ft-label">GOAL</span></div>
+        </div>
+        <svg id="mini-chart" viewBox="0 0 340 90" preserveAspectRatio="none" style="width:100%;height:90px;display:block;border-radius:6px;overflow:hidden;"></svg>
+      </div>
+
+      <div class="heat-wrap">
+        <div style="font-family:'Orbitron';font-size:11px;font-weight:700;color:var(--text);letter-spacing:1px;margin-bottom:11px;">WEEKLY COMBAT LOG</div>
+        <div class="heat-grid" id="heat-grid"></div>
+      </div>
+
+      <span class="s-label">WORLD RANKINGS</span>
+      <div class="s-title">LEADERBOARD</div>
+      <div id="lb-list"></div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- Bottom Nav -->
+  <div id="bottom-nav">
+    <div class="nav-inner">
+      <button class="nav-item active" id="tab-home" onclick="switchTab('home')"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></button>
+      <button class="nav-item" id="tab-dungeon" onclick="switchTab('dungeon')"><div class="nav-icon">⚔️</div><div class="nav-label">Dungeon</div></button>
+      <button class="nav-item" id="tab-raids" onclick="switchTab('raids')"><div class="nav-icon">💀</div><div class="nav-label">Raids</div></button>
+      <button class="nav-item" id="tab-army" onclick="switchTab('army')"><div class="nav-icon">👥</div><div class="nav-label">Army</div></button>
+      <button class="nav-item" id="tab-profile" onclick="switchTab('profile')"><div class="nav-icon">👤</div><div class="nav-label">Profile</div></button>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const S = {level:6, xp:1240, xpMax:2000, streak:6, bossHP:85, bossAttacks:[false,true,true,false,false,false,false], dungeonType:'fat-burn', difficulty:'easy', questsDone:[true,false,false,false,false]};
+
+/* ── BOOT ── */
+const BOOT_LINES=['SCANNING HUNTER PROFILE...','DETECTING FAT MONARCH POWER...','ASSIGNING DAILY QUESTS...','SHADOW EXTRACTION READY...','SYSTEM ONLINE ▌'];
+window.addEventListener('load',()=>{
+  const bl=document.getElementById('boot-lines');
+  BOOT_LINES.forEach((t,i)=>{const d=document.createElement('div');d.className='boot-line';d.textContent=t;d.style.animationDelay=(i*.42)+'s';bl.appendChild(d);});
+  setTimeout(()=>{document.getElementById('boot').style.opacity='0';setTimeout(()=>{document.getElementById('boot').style.display='none';document.getElementById('app').classList.add('visible');initAll();},600);},3400);
+});
+
+function initAll(){
+  initParticles();initQuestTimer();renderHomeQuests();renderRankLadder();renderArmyGrid();renderAchievements();renderLeaderboard();renderHeatGrid();renderMiniChart();renderRaidDays();setGreeting();
+  setTimeout(()=>toast('Daily Quests Assigned','5 combat protocols await. The Fat Monarch grows stronger while you rest.','+1200 XP AVAILABLE'),900);
+  setInterval(randomToast,90000);
+}
+
+/* ── PARTICLES ── */
+function initParticles(){
+  const c=document.getElementById('particles'),ctx=c.getContext('2d');
+  const resize=()=>{c.width=window.innerWidth;c.height=window.innerHeight;};resize();window.addEventListener('resize',resize);
+  const pts=Array.from({length:45},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.3,vy:-(Math.random()*.4+.1),r:Math.random()*1.5+.5,op:Math.random()*.4+.1,life:0,max:Math.random()*180+80,col:Math.random()>.5?'#7c4dff':'#00b4ff'}));
+  (function loop(){ctx.clearRect(0,0,c.width,c.height);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.life++;if(p.y<0||p.life>p.max){p.x=Math.random()*c.width;p.y=c.height+5;p.life=0;}const f=Math.sin((p.life/p.max)*Math.PI);ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.col+(Math.floor(f*p.op*200)).toString(16).padStart(2,'0');ctx.fill();});requestAnimationFrame(loop);})();
+}
+
+/* ── TABS ── */
+function switchTab(n){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(t=>t.classList.remove('active'));
+  document.getElementById('screen-'+n).classList.add('active');
+  document.getElementById('tab-'+n).classList.add('active');
+  document.getElementById('content').scrollTop=0;
+}
+
+/* ── TOAST ── */
+let toastT;
+function toast(title,body,xp){
+  document.getElementById('toast-title').textContent=title;
+  document.getElementById('toast-body').textContent=body;
+  document.getElementById('toast-xp').textContent=xp;
+  const t=document.getElementById('toast');t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),5000);
+}
+const TOASTS=[['System Alert','The Fat Monarch senses hesitation. Return to training NOW.','⚠ STAT DECAY IMMINENT'],['Rank Gate Detected','D-Rank Gate open. Complete 0.8 KG more to qualify.','+500 XP IF CLEARED'],['Shadow Army Report','Iron & Igris grow restless without battle. Train now.','EMPOWER YOUR SHADOWS'],['Bonus Protocol Active','Optimal training window detected. Bonus XP active.','+2× XP FOR 30 MIN']];
+function randomToast(){const m=TOASTS[Math.floor(Math.random()*TOASTS.length)];toast(m[0],m[1],m[2]);}
+function showRandomToast(){randomToast();}
+
+/* ── LEVEL UP ── */
+function showLvlUp(){
+  document.getElementById('lvl-num').textContent=S.level;
+  const R=['+500 XP · Shadow Extracted: Iron Walker','+500 XP · Title: "Rising Hunter"','+500 XP · STR +5, AGI +3','+500 XP · New Dungeon Unlocked'];
+  document.getElementById('lvl-reward').textContent=R[Math.floor(Math.random()*R.length)];
+  document.getElementById('lvl-overlay').classList.add('show');
+}
+function closeLvlUp(){document.getElementById('lvl-overlay').classList.remove('show');}
+
+/* ── XP ── */
+function addXP(a){
+  S.xp+=a;if(S.xp>=S.xpMax){S.xp-=S.xpMax;S.level++;setTimeout(showLvlUp,400);}
+  const p=Math.min((S.xp/S.xpMax)*100,100);
+  document.getElementById('hero-xp-bar').style.width=p+'%';
+  document.getElementById('hero-xp-txt').textContent=S.xp.toLocaleString()+' / '+S.xpMax.toLocaleString()+' XP';
+  document.getElementById('hero-lvl-num').textContent=S.level;
+}
+
+/* ── QUEST TIMER ── */
+function initQuestTimer(){
+  function tick(){const now=new Date(),mid=new Date(now);mid.setHours(24,0,0,0);const d=mid-now;const h=String(Math.floor(d/3600000)).padStart(2,'0'),m=String(Math.floor((d%3600000)/60000)).padStart(2,'0'),s=String(Math.floor((d%60000)/1000)).padStart(2,'0');const el=document.getElementById('quest-timer-home');if(el)el.textContent=`${h}:${m}:${s}`;}
+  tick();setInterval(tick,1000);
+}
+
+/* ── QUESTS ── */
+const QUESTS=[{name:'Shadow Walk',meta:'10,000 steps · ~320 kcal',xp:200,icon:'👣'},{name:'Iron Fist Protocol',meta:'50 push-ups · ~85 kcal',xp:180,icon:'✊'},{name:'Squat Protocol',meta:'100 squats · ~110 kcal',xp:220,icon:'🦵'},{name:'Mana Burst',meta:'20 min HIIT · ~280 kcal',xp:350,icon:'💥'},{name:"Hunter's Core",meta:'5 min plank · ~60 kcal',xp:150,icon:'🛡️'}];
+function renderHomeQuests(){
+  document.getElementById('home-quest-list').innerHTML=QUESTS.map((q,i)=>`<div class="quest-row ${S.questsDone[i]?'done':''}" onclick="completeQuest(${i},${q.xp})"><div class="q-check">${S.questsDone[i]?'✓':''}</div><div class="q-info"><span class="q-name">${q.icon} ${q.name}</span><span class="q-meta">${q.meta}</span></div><div class="q-xp">+${q.xp}</div></div>`).join('');
+}
+function completeQuest(i,xp){if(S.questsDone[i])return;S.questsDone[i]=true;renderHomeQuests();addXP(xp);toast('Quest Complete!',`${QUESTS[i].name} cleared. The System records your effort.`,`+${xp} XP EARNED`);}
+
+/* ── DUNGEON ── */
+const WDB={
+  'fat-burn':{easy:[{n:'Jumping Jacks',s:'3×30',c:'~120'},{n:'Bodyweight Squats',s:'3×15',c:'~80'},{n:'High Knees',s:'3×30s',c:'~100'},{n:'Mountain Climbers',s:'3×20',c:'~90'}],normal:[{n:'Burpee Strike',s:'4×15',c:'~200'},{n:'Jump Squats',s:'4×20',c:'~150'},{n:'Shadow Box',s:'3×2m',c:'~180'},{n:'Sprint Protocol',s:'6×100m',c:'~160'},{n:'Tabata High Knees',s:'8×20s',c:'~140'}],hard:[{n:'Burpee Complex',s:'5×20',c:'~280'},{n:'Box Jump Assault',s:'5×12',c:'~180'},{n:'Battle Ropes',s:'5×30s',c:'~220'},{n:'Sprint Intervals',s:'10×100m',c:'~260'},{n:'Bear Crawl',s:'4×25m',c:'~110'},{n:'Tabata Finale',s:'8rds',c:'~300'}]},
+  strength:{easy:[{n:'Push-ups',s:'3×10',c:'~50'},{n:'Lunges',s:'3×12',c:'~60'},{n:'Plank Hold',s:'3×30s',c:'~30'},{n:'Glute Bridge',s:'3×15',c:'~40'}],normal:[{n:'Shadow Press',s:'4×8',c:'~70'},{n:'Monarch Squat',s:'4×10',c:'~80'},{n:'Dumbbell Row',s:'4×10',c:'~60'},{n:'Shoulder Press',s:'4×8',c:'~65'},{n:'Chin-ups',s:'4×6',c:'~55'}],hard:[{n:'Hunter Deadlift',s:'5×5',c:'~100'},{n:'Barbell Squat',s:'5×5',c:'~90'},{n:'Bench Press',s:'5×5',c:'~80'},{n:'Weighted Pull-ups',s:'5×5',c:'~70'},{n:'Heavy Row',s:'5×6',c:'~65'}]},
+  endurance:{easy:[{n:'Brisk Walk',s:'30min',c:'~150'},{n:'Incline Walk',s:'20min',c:'~130'},{n:'Light Jog',s:'2km',c:'~160'}],normal:[{n:'Hunter Run',s:'5km',c:'~380'},{n:'Stair Assault',s:'20 flrs',c:'~200'},{n:'Zone 2 Cardio',s:'35min',c:'~260'}],hard:[{n:'Shadow Run',s:'10km',c:'~750'},{n:'Mana Cycling',s:'60min',c:'~550'},{n:'Swim Protocol',s:'2km',c:'~600'},{n:'Incline Run',s:'6km',c:'~480'}]},
+  hiit:{easy:[{n:'Jump Rope',s:'5min',c:'~80'},{n:'Quick Squats',s:'3×20',c:'~70'},{n:'Fast Lunges',s:'3×15',c:'~65'}],normal:[{n:'Tabata Squats',s:'8rds',c:'~150'},{n:'AMRAP Circuit',s:'15min',c:'~220'},{n:'Jump Rope',s:'10min',c:'~150'},{n:'Burpees',s:'4×12',c:'~160'}],hard:[{n:'Death Circuit',s:'5rds',c:'~350'},{n:'Tabata Everything',s:'12rds',c:'~300'},{n:'Kettlebell HIIT',s:'20min',c:'~280'},{n:'Sprint Circuit',s:'6rds',c:'~320'},{n:'Plyometric Hell',s:'4rds',c:'~250'}]}
+};
+function selectDg(el,t){document.querySelectorAll('.dg-tab').forEach(d=>d.classList.remove('active'));el.classList.add('active');S.dungeonType=t;document.getElementById('dungeon-output').innerHTML='';}
+function selectDiff(el,d){document.querySelectorAll('.diff-pill').forEach(p=>p.className='diff-pill');el.classList.add('a-'+d);S.difficulty=d;document.getElementById('dungeon-output').innerHTML='';}
+function generateWorkout(){
+  const pool=WDB[S.dungeonType][S.difficulty];
+  const list=[...pool].sort(()=>Math.random()-.5);
+  const cal=list.reduce((a,e)=>a+parseInt(e.c.replace(/[^0-9]/g,'')),0);
+  const dur=S.difficulty==='easy'?'30':S.difficulty==='normal'?'45':'60';
+  document.getElementById('dungeon-output').innerHTML=`<div class="wo-summary"><div><span class="ws-val">${list.length}</span><span class="ws-lbl">Exercises</span></div><div><span class="ws-val">~${cal}</span><span class="ws-lbl">KCAL</span></div><div><span class="ws-val">${dur}m</span><span class="ws-lbl">Est.</span></div></div>${list.map((e,i)=>`<div class="ex-card" style="animation-delay:${i*.07}s"><div class="ex-num">${i+1}</div><div style="flex:1"><span class="ex-name">${e.n}</span><span class="ex-meta">~${e.c} kcal</span></div><div class="ex-sets">${e.s}</div></div>`).join('')}<div style="display:flex;gap:9px;margin-top:4px;margin-bottom:20px;"><button class="btn btn-primary" style="flex:1" onclick="startWorkout()">⚔ BEGIN RAID</button><button class="btn btn-ghost" style="width:48px;min-height:48px;border-radius:8px;font-size:18px;" onclick="generateWorkout()">🔀</button></div>`;
+  addXP(30);toast('Protocol Generated','The System has issued your orders. No excuses allowed.','+30 XP PLANNING');
+}
+function startWorkout(){addXP(500);toast('DUNGEON CLEARED!','Shadow extracted. Your army grows stronger.','+500 XP · SHADOW EXTRACTED');setTimeout(()=>switchTab('home'),1500);}
+
+/* ── RANK LADDER ── */
+const RANKS=[{l:'E',n:'Weakest Hunter',req:'START',col:'#9e9e9e',curr:true},{l:'D',n:'Novice Hunter',req:'−5 KG',col:'#8bc34a'},{l:'C',n:'Fighter',req:'−10 KG',col:'#00b4ff'},{l:'B',n:'Warrior',req:'−15 KG',col:'#b39ddb'},{l:'A',n:'Elite Hunter',req:'−20 KG',col:'#ffd700'},{l:'S',n:'Monarch',req:'−30 KG',col:'#ff1744'},{l:'SS',n:'National',req:'GOAL WT',col:'#ff6d00'},{l:'SSS',n:'Shadow Monarch',req:'LEGEND',col:'#ffd700'}];
+function renderRankLadder(){document.getElementById('rank-ladder').innerHTML=RANKS.map(r=>`<div class="rank-row ${r.curr?'current':'locked'}"><span class="rank-letter-sm" style="color:${r.col}">${r.l}</span><div><span class="rank-name-sm">${r.n}</span><span class="rank-req-sm">${r.req}</span></div></div>`).join('');}
+
+/* ── SHADOW ARMY ── */
+const SHADOWS=[{n:'Iron',em:'⚔️',lv:5,u:true},{n:'Beru',em:'🐛',lv:3,u:true},{n:'Igris',em:'🛡️',lv:4,u:true},{n:'Tusk',em:'🪖',lv:0,u:false},{n:'Greed',em:'🗡️',lv:0,u:false},{n:'Kaisel',em:'🐉',lv:0,u:false},{n:'Esil',em:'✨',lv:0,u:false},{n:'???',em:'❓',lv:0,u:false}];
+function renderArmyGrid(){document.getElementById('army-grid').innerHTML=SHADOWS.map(s=>`<div class="shadow-cell ${s.u?'':'locked'}" onclick="${s.u?`toast('${s.n}','Shadow LV ${s.lv} — Fighting for your victories.','SHADOW ACTIVE')`:`toast('Locked Shadow','Complete more raids to extract this soldier.','KEEP TRAINING')`}"><div class="shadow-em">${s.em}</div><div class="shadow-nm">${s.n}</div><div class="shadow-lv">${s.u?'LV '+s.lv:'???'}</div></div>`).join('');}
+
+/* ── BOSS RAIDS ── */
+const DAYS=['MON','TUE','WED','THU','FRI','SAT','SUN'];
+function renderRaidDays(){document.getElementById('raid-days').innerHTML=DAYS.map((d,i)=>`<div class="raid-day ${S.bossAttacks[i]?'done':''}"><span class="raid-day-abbr">${d}</span><span class="raid-day-icon">${S.bossAttacks[i]?'⚡':'○'}</span></div>`).join('');}
+function attackBoss(){const idx=S.bossAttacks.findIndex(d=>!d);if(idx===-1){toast('MONARCH SLAIN!','BEELZEBUB has fallen. Claim your rewards.','+2000 XP VICTORY');return;}S.bossAttacks[idx]=true;S.bossHP=Math.max(0,S.bossHP-Math.floor(Math.random()*10+10));document.getElementById('boss-hp-fill').style.width=S.bossHP+'%';document.getElementById('boss-hp-pct').textContent=S.bossHP+'%';renderRaidDays();addXP(200);toast('Strike Landed!',`Monarch staggers. HP at ${S.bossHP}%. Press your advantage.`,'+200 XP DAMAGE BONUS');if(S.bossHP<=0)setTimeout(()=>toast('MONARCH SLAIN!','BEELZEBUB DEFEATED. You have freed your body.','+2000 XP · TITLE EARNED'),1200);}
+
+/* ── ACHIEVEMENTS ── */
+const ACHS=[{em:'🏆',n:'First Blood',d:'Complete your first quest',xp:100,u:true},{em:'🔥',n:'Ignition',d:'Maintain a 3-day streak',xp:200,u:true},{em:'💀',n:'Fat Slayer',d:'Eliminate 1 KG of body fat',xp:500,u:true},{em:'⚔️',n:'Battle Ready',d:'Complete 10 dungeon raids',xp:300,u:false},{em:'👑',n:'Shadow Warden',d:'Extract 3 shadow soldiers',xp:400,u:false},{em:'🌊',n:'Endurance King',d:'Run 50 km total',xp:600,u:false},{em:'🌙',n:'Monarch Hunter',d:'Defeat your first weekly boss',xp:1000,u:false},{em:'🐉',n:'Shadow Monarch',d:'Reach SSS-Rank',xp:10000,u:false}];
+function renderAchievements(){document.getElementById('ach-list').innerHTML=ACHS.map(a=>`<div class="ach-row ${a.u?'unlocked':'locked'}" onclick="${a.u?`toast('${a.n}','${a.d}','+${a.xp} XP')`:`toast('Locked','${a.d}','EARN THIS')`}"><div class="ach-em">${a.u?a.em:'🔒'}</div><div style="flex:1"><span class="ach-nm">${a.n}</span><span class="ach-desc-sm">${a.d}</span></div><div class="ach-xp-sm">+${a.xp.toLocaleString()}</div></div>`).join('');}
+
+/* ── LEADERBOARD ── */
+const LB=[{pos:'🥇',n:'Shadow_Monarch_Jin',t:'The Absolute',r:'SSS',rc:'#ffd700',fat:'47.3 kg'},{pos:'🥈',n:'IronBody_Goto',t:'The Strongest',r:'SS',rc:'#c0c0c0',fat:'38.1 kg'},{pos:'🥉',n:'BloodHunter_Liu',t:'Dragon Slayer',r:'S',rc:'#ff1744',fat:'31.8 kg'},{pos:'4',n:'Monarch_Killer',t:'Elite Hunter',r:'A',rc:'#ffd700',fat:'24.5 kg'},{pos:'5',n:'DarkFlame_Kira',t:'Shadow Warrior',r:'A',rc:'#7c4dff',fat:'21.2 kg'},{pos:'6',n:'YOU',t:'Weakest Hunter',r:'E',rc:'#9e9e9e',fat:'4.2 kg',you:true},{pos:'7',n:'NewHunter_9847',t:'Novice',r:'E',rc:'#9e9e9e',fat:'2.1 kg'}];
+function renderLeaderboard(){document.getElementById('lb-list').innerHTML=LB.map(h=>`<div class="lb-row ${h.you?'you':''}"><div class="lb-pos">${h.pos}</div><div style="flex:1;min-width:0"><span class="lb-hunter-nm">${h.n}</span><span class="lb-hunter-title">${h.t}</span></div><div class="lb-rank-chip" style="color:${h.rc};border:1px solid ${h.rc}44">${h.r}</div><div class="lb-fat-val">${h.fat}</div></div>`).join('');}
+
+/* ── HEAT GRID ── */
+function renderHeatGrid(){const D=['MON','TUE','WED','THU','FRI','SAT','SUN'],ST=['done','done','done','done','done','',''];document.getElementById('heat-grid').innerHTML=D.map((d,i)=>`<div class="heat-cell ${ST[i]}" onclick="toggleHeat(this)"><span class="heat-day-abbr">${d}</span><span class="heat-icon">${ST[i]==='done'?'⚡':ST[i]==='miss'?'✗':'·'}</span></div>`).join('');}
+function toggleHeat(el){if(el.classList.contains('done')){el.classList.replace('done','miss');el.querySelector('.heat-icon').textContent='✗';}else if(el.classList.contains('miss')){el.classList.remove('miss');el.querySelector('.heat-icon').textContent='·';}else{el.classList.add('done');el.querySelector('.heat-icon').textContent='⚡';addXP(80);}}
+
+/* ── MINI CHART ── */
+function renderMiniChart(){const svg=document.getElementById('mini-chart'),w=340,h=90,px=10,py=10;const wts=[105,103.8,102.5,101.2,100.1,99.4,98.8];const mn=Math.min(...wts)-1,mx=Math.max(...wts)+1;const pts=wts.map((v,i)=>({x:px+(i/(wts.length-1))*(w-px*2),y:py+((mx-v)/(mx-mn))*(h-py*2)}));const path=pts.map((p,i)=>`${i?'L':'M'}${p.x} ${p.y}`).join(' ');const fill=path+` L${pts[pts.length-1].x} ${h} L${pts[0].x} ${h} Z`;svg.innerHTML=`<defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00b4ff" stop-opacity="0.3"/><stop offset="100%" stop-color="#00b4ff" stop-opacity="0"/></linearGradient></defs><path d="${fill}" fill="url(#cg)"/><path d="${path}" stroke="#00b4ff" stroke-width="2" fill="none"/>${pts.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="3.5" fill="#00b4ff"/>`).join('')}`;}
+
+/* ── GREETING ── */
+function setGreeting(){const h=new Date().getHours();const g=h<12?'GOOD MORNING':h<17?'GOOD AFTERNOON':'GOOD EVENING';document.getElementById('hero-greeting').textContent=`[ SYSTEM — ${g}, HUNTER ]`;}
+
+/* ── FAB ── */
+function quickLog(){addXP(150);toast('Activity Logged','Workout recorded by the System. Well done, Hunter.','+150 XP LOGGED');}
+</script>
+</body>
+</html>
+
